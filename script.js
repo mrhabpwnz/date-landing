@@ -1,5 +1,5 @@
-const time = document.querySelector('#ime'),
-    greeting = document.querySelector('g#reeting'),
+const time = document.querySelector('#time'),
+    greeting = document.querySelector('#greeting'),
     name = document.querySelector('#name'),
     focus = document.querySelector('#focus');
 
@@ -44,6 +44,8 @@ function setBgGreet() {
 function getName() {
     if (localStorage.getItem('name') === null) {
         name.textContent = '[Enter Name]';
+    } else if (localStorage.getItem('name') === undefined) {
+        name.textContent = '[Enter Name]';
     } else {
         name.textContent = localStorage.getItem('name');
     }
@@ -51,7 +53,7 @@ function getName() {
 
 function setName(e) {
     if (e.type === 'keypress') {
-        if (e.which == 13 || e.keyCode == 13) {
+        if (e.keyCode == 13) {
             localStorage.setItem('name', e.target.innerText);
             name.blur();
         }
@@ -63,6 +65,8 @@ function setName(e) {
 function getFocus() {
     if (localStorage.getItem('focus') === null) {
         focus.textContent = '[Enter Focus]';
+    } else if (localStorage.getItem('focus') === undefined) {
+        focus.textContent = '[Enter Focus]';
     } else {
         focus.textContent = localStorage.getItem('focus');
     }
@@ -70,7 +74,7 @@ function getFocus() {
 
 function setFocus(e) {
     if (e.type === 'keypress') {
-        if (e.which == 13 || e.keyCode == 13) {
+        if (e.keyCode == 13) {
             localStorage.setItem('focus', e.target.innerText);
             focus.blur();
         }
@@ -79,10 +83,20 @@ function setFocus(e) {
     }
 }
 
+    function removeDefault(e) {
+        if (e.type === 'click' && (e.target.textContent === '[Enter Name]'
+            || e.target.textContent === '[Enter Focus]')) {
+            e.target.textContent = '';
+            localStorage.removeItem(e.target.name);
+        }
+    }
+
 name.addEventListener('keypress', setName);
 name.addEventListener('blur', setName);
 focus.addEventListener('keypress', setFocus);
 focus.addEventListener('blur', setFocus);
+name.addEventListener('click', removeDefault);
+focus.addEventListener('click', removeDefault);
 
 showTime();
 setBgGreet();
